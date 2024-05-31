@@ -2,7 +2,7 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const XLSX = require('xlsx');
 const path = require('path');
 const fs = require('fs');
@@ -41,8 +41,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
     const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 
     const insertPromises = xlData.map((row) => {
+      console.log(row);
       return new Promise((resolve, reject) => {
-        const query = 'INSERT INTO your_table SET ?';
+        const query = 'INSERT INTO EmpTable SET ?';
         db.query(query, row, (err, result) => {
           if (err) return reject(err);
           resolve(result);
